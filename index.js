@@ -17,14 +17,30 @@ MongodbAdatper.prototype.save = function(scope, key, obj, cb) {
   }, cb);
 }
 MongodbAdatper.prototype.find = function(scope, key, cb) {
-  this.collection(scope).findOne({
-    _key: key
-  }, cb);
+  if (Array.isArray(key)) {
+    this.collection(scope).findOne({
+      _key: {
+        $in: key
+      }
+    }, cb); 
+  } else {
+    this.collection(scope).findOne({
+      _key: key
+    }, cb);
+  }
 }
 MongodbAdatper.prototype.delete = function(scope, key, cb) {
-  this.collection(scope).remove({
-    _key: key
-  }, cb);
+  if (Array.isArray(key)) {
+    this.collection(scope).remove({
+      _key: {
+        $in: key
+      }
+    }, cb);
+  } else {
+    this.collection(scope).remove({
+      _key: key
+    }, cb);
+  }
 }
 MongodbAdatper.prototype.collection = function(scope) {
   var prefix = this.config.prefix;
